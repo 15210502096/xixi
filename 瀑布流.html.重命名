@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style type="text/css">
+		* {margin: 0; padding: 0;}
+		#container {width: 840px; margin: 0 auto;}
+		ul {width: 200px; margin: 0 5px; float: left;}
+		li {width: 200px; background: lightgray; margin-bottom: 10px; list-style: none; font-size: 40px; text-align: center; color: white;}
+	</style>
+</head>
+<body>
+	<div id="container">
+		<ul></ul>
+		<ul></ul>
+		<ul></ul>
+		<ul></ul>
+	</div>
+</body>
+</html>
+<script type="text/javascript">
+	addNodes(30);
+
+	document.onscroll = function () {
+		// 每触发一次事件，就会得到一个新的高度
+		var newHeight = scrollY()+clientH();
+
+		// 找出最短的一列
+		var ulArr = document.getElementsByTagName('ul');
+		var heightArr = [];//盛放每个ul高度的数组
+
+		for (var i=0; i<ulArr.length; i++){
+			heightArr.push(ulArr[i].offsetHeight);
+		}
+
+		var shortHeight = Math.min.apply(null,heightArr);
+
+		if (newHeight>=shortHeight){
+			addNodes(30);
+		}
+
+	}
+
+	// 控制要生成几个li
+	function addNodes(num) {
+		for (var i=0; i<num; i++){
+			createLi();
+		}
+	}
+	
+
+	// 创建li
+	function createLi() {
+		var liArr = document.getElementsByTagName('li');
+		var index; //用来记录最短一列ul的下标
+
+		var newLi = document.createElement('li');
+		newLi.style.height = rand(100,300) +'px';
+		newLi.innerHTML = liArr.length+1;
+
+		// 追加
+
+		// 要追加到最短的一列ul上
+		// 先获取ul高度，然后进行比较，记录下最短的一列
+		var ulArr = document.getElementsByTagName('ul');
+		var heightArr = [];//用来盛放所有ul的高度
+		for (var i=0; i<ulArr.length; i++){
+			heightArr.push(ulArr[i].offsetHeight);
+		}
+
+		var shortHeight = Math.min.apply(null,heightArr);
+		// 要根据最短的高度，找出，最短一列的下标
+		index = heightArr.indexOf(shortHeight);
+
+		ulArr[index].appendChild(newLi);
+	}
+
+	function rand(min,max) {
+		return parseInt(min+(max-min)*Math.random());
+	}
+
+	function scrollY() {
+		return document.body.scrollTop || document.documentElement.scrollTop;
+	}
+
+	function clientH() {
+		return window.innerHeight || document.documentElement.clientHeight;
+	}
+
+
+
+</script>
